@@ -1,6 +1,10 @@
 ﻿using DAL;
+using DAL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using DAL.ViewModel;
+
 
 namespace LabNET105.Controllers
 {
@@ -12,12 +16,31 @@ namespace LabNET105.Controllers
             _context = new LabDbContext();
         }
         // GET: BillController
-        public ActionResult ListBills()
-        {
-            var bills = _context.Bills.ToList() ;
-            return View(bills);
-        }
 
+
+        public List<BillViewModel> ListBill(int id, string name,double totalprice)
+        {
+            
+            var model = from a in _context.Bills
+                        join b in _context.BillDetails
+
+                        on a.Id equals b.BillId
+                        join c in _context.Accounts
+                        on a.AccountId equals c.Id
+
+                        where a.Id == id
+
+                        select new BillViewModel
+                        {
+                            Id = a.Id,
+                            Name = c.Username,
+                            TotalPrice = b.Price * b.Quantity
+                        };
+            model.OrderByDescending(x => x.TotalPrice);
+            return model.ToList();
+
+                       
+        }
         // GET: BillController/Details/5
         public ActionResult Details(int id)
         {
@@ -25,26 +48,10 @@ namespace LabNET105.Controllers
             return View(detailbills);
         }
 
-        // GET: BillController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //Cái này là để xem những billdetail nào có trong bill
+ 
 
-        // POST: BillController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+
 
         // GET: BillController/Edit/5
         public ActionResult Edit(int id)
