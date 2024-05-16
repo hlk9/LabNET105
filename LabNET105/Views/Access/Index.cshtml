@@ -1,0 +1,53 @@
+﻿<div class="d-flex justify-content-center flex-column align-items-center">
+    <div class="fw-bold fs-3">Đăng nhập</div>
+    <div>
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.Error
+            </div>
+        }
+        
+    </div>
+    <div class="w-50">
+        <form enctype="multipart/form-data" asp-action="Index">
+            <!-- Email input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+                <label class="form-label" for="form2Example1">Username</label>
+                <input type="text" id="username" name="username" class="form-control" />
+            </div>
+
+            <!-- Password input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+                <label class="form-label" for="form2Example2">Password</label>
+                <input type="password" class="form-control" id="password" name="password" />
+            </div>
+
+ 
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Đăng nhập</button>
+
+            <!-- Register buttons -->
+            <div class="text-center">
+                <p>Không có? <a href="#!">Đăng ký ngay</a></p>
+                <p>or sign up with:</p>
+                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-facebook-f"></i>
+                </button>
+
+                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-google"></i>
+                </button>
+
+                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-twitter"></i>
+                </button>
+
+                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-github"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

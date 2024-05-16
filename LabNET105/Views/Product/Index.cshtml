@@ -1,0 +1,73 @@
+﻿@model IEnumerable<DAL.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">Thêm Mới Sản Phẩm</h1>
+
+<p>
+
+    <button class="btn btn-success float-end"><a class="nav-link text-white p-0" asp-action="Create" asp-controller="Product">Thêm Mới</a></button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                    @if(item.Status == 1)
+                    {
+                        <p>Mở Bán</p>
+                    }
+                    else
+                    {
+                        <p>Ngừng Bán</p>
+                    }
+                </td>
+            <td>
+                <button class="btn btn-primary"><a class="nav-link text-white p-0" asp-action="Detail" asp-controller="Product" asp-route-productId="@item.Id">Chi Tiết</a></button>
+                <button class="btn btn-warning"><a class="nav-link text-white p-0" asp-action="Edit" asp-controller="Product" asp-route-productId="@item.Id">Sửa</a></button>
+                <button class="btn btn-danger"><a class="nav-link text-white p-0" asp-action="Delete" asp-controller="Product" asp-route-productId="@item.Id">Xóa</a></button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
