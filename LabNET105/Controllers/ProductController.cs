@@ -66,7 +66,7 @@ namespace LabNET105.Controllers
             _context.Products.Update(objProduct);
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit");
         }
 
         public IActionResult Delete(int productId)
