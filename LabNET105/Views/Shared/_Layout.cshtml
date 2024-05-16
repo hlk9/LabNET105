@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor contxt;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,7 +35,14 @@
                     </ul>
                 </div>
                 <div>
-                    <a asp-action="Index" asp-controller="Access">Đăng nhập</a>
+                    @if(contxt.HttpContext.Session.GetString("username")!=null)
+                    {
+                        <p>Xin chào @contxt.HttpContext.Session.GetString("username")</p>
+                    }
+                    else
+                    {
+                    <a asp-action="Index" asp-controller="Access" class="text-black text-decoration-none">Đăng nhập</a>
+                    }
                 </div>
             </div>
         </nav>
