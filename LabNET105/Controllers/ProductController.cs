@@ -91,27 +91,28 @@ namespace LabNET105.Controllers
         {
             // Kiểm tra xem có đang đăng nhập ko, nếu ko thì bắt đăng nhập
             var product = _context.Products.FirstOrDefault(p => p.Id == productId);
-            var check = HttpContext.Session.GetString("username");
-            if (String.IsNullOrEmpty(check))
+            Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
+            var getCartId = _context.Carts.FirstOrDefault(x => x.AccountId == userId);
+            if (userId == null)
             {
                 return RedirectToAction("Index", "Account"); // chuyển hướng về trang login
             }
             else
             {
-                var cartItem = _context.CartItems.FirstOrDefault(p => p.CartId.ToString() == check  && p.ProductId == productId);
+                var cartItem = _context.CartItems.FirstOrDefault(p => p.CartId == getCartId.Id  && p.ProductId == productId);
                 if (cartItem == null)
                 {
-                    string checkstring = check.ToString();
+                    
                     CartItem details = new CartItem()
                     {
                         ProductId = productId,
-                        CartId = int.Parse(check),
+                        CartId = getCartId.Id,
                         Quantity = quantity
                     };
                     _context.CartItems.Add(details);
                     _context.SaveChanges();
                 }
-                else if (cartItem.Quantity <=  product.Quantity)
+                else if (cartItem.Quantity >=  product.Quantity)
                 {
                     return BadRequest(" Số lượng trong kho đã hết");
                 }

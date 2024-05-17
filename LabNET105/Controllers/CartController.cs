@@ -1,5 +1,6 @@
 ﻿using DAL;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LabNET105.Controllers
 {
@@ -13,23 +14,17 @@ namespace LabNET105.Controllers
         public IActionResult Index() 
         {
             // Kiểm tra dữ liệu đăng nhập
-            var check = HttpContext.Session.GetString("username");
-            if (String.IsNullOrEmpty(check))
+            var check = HttpContext.Session.GetString("uid");
+            var getCartId = context.Carts.FirstOrDefault(x => x.AccountId == Guid.Parse(check)).Id;
+            if (check == null)
             {
                 return RedirectToAction("Index", "Access"); // chuyển hướng về trang login
             }
             else
             {
-                if (int.TryParse(check, out int usernameInt))
-                {
-                    var allCartItem = context.CartItems.Where(p => p.ProductId == usernameInt).ToList();
-                    return View(allCartItem);
-                }
-                else
-                {
-                    
-                    return RedirectToAction("Index", "Home");
-                }
+                var allCartItem = context.CartItems.Where(p => p.CartId == getCartId).ToList();
+                return View(allCartItem);
+                
             }
         }
 
