@@ -55,7 +55,7 @@ namespace LabNET105.Controllers
         //Cái này là để xem những billdetail nào có trong bill
 
 
-        public IActionResult Create()
+        public IActionResult ThanhToan()
         {
             return View();
         }

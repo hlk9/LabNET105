@@ -4,22 +4,20 @@
     ViewData["Title"] = "ListBill";
 }
 
-<h1>ListBill</h1>
+<p class="text-center"><h1>Danh sách hóa đơn</h1></p>
 
-<p>
-   
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+              <label class="form-label">ID</label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <label class="form-label">Tên khách hàng</label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
+                <label class="form-label">Thành tiền</label>
             </th>
             <th></th>
         </tr>
@@ -37,11 +35,12 @@
                 @Html.DisplayFor(modelItem => item.TotalPrice)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+               @*  @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }) *@
 
                     <a asp-action="Details" asp-controller="Bill" class="btn btn-primary nav-link text-dark" >Xem hóa đơn</a>
+                    <a asp-action="ThanhToan" asp-controller="Bill" class="btn btn-warning nav-link text-dark">Thanh toán</a>
             </td>
         </tr>
 }
