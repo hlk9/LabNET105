@@ -60,7 +60,8 @@ namespace LabNET105.Controllers
             {
                 AccountId = userId,
                 totalPrice = 100000,
-                Status = 1
+                Status = 1,
+                BuyDate = DateTime.Now
 
             };
             context.Bills.Add(bill);

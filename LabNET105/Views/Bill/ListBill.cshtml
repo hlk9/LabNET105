@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DAL.ViewModel.BillViewModel>
+﻿@model IEnumerable<DAL.Models.Bill>
 
 @{
     ViewData["Title"] = "ListBill";
@@ -14,12 +14,14 @@
               <label class="form-label">ID</label>
             </th>
             <th>
-                <label class="form-label">Tên khách hàng</label>
+                <label class="form-label">Ngày mua</label>
             </th>
             <th>
                 <label class="form-label">Thành tiền</label>
             </th>
-            <th></th>
+            <th>
+                Thao tác
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -29,17 +31,19 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @item.BuyDate.ToString("HH:mm dd/MM/yyyy")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
+                @Html.DisplayFor(modelItem => item.totalPrice)
             </td>
             <td>
                @*  @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.Id }) *@
 
-                    <a asp-action="Details" asp-controller="Bill" class="btn btn-primary nav-link text-dark" >Xem hóa đơn</a>
+                    <a asp-action="Details" asp-controller="Bill" class="btn btn-primary" >Xem hóa đơn</a>
+                    <a class="btn-danger btn">Huỷ</a>
+                    <a class="btn-success btn">Mua lại</a>
                    
             </td>
         </tr>

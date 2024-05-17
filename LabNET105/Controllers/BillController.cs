@@ -19,36 +19,21 @@ namespace LabNET105.Controllers
         // GET: BillController
 
 
-        public IActionResult  ListBill ()
+        public IActionResult ListBill()
         {
             Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
-            var model = from a in _context.Bills
-                        join b in _context.BillDetails
 
-                        on a.Id equals b.BillId
-                        join c in _context.Accounts
-                        on a.AccountId equals c.Id
+            ICollection<Bill> model = _context.Bills.Where(x => x.AccountId == userId).ToList();
 
-                        where a.AccountId == userId
+            return View(model);
 
-                        select new BillViewModel
-                        {
-                            Id = a.Id,
-                            Name = c.Username,
-                            TotalPrice = b.Price * b.Quantity
-                        };
-            model.OrderByDescending(x => x.TotalPrice);
-            
 
-            return View(model.ToList());
-
-                       
         }
         // GET: BillController/Details/5
         public ActionResult Details(int id)
         {
-          
-            var detailbills= _context.BillDetails.ToList() ;
+
+            var detailbills = _context.BillDetails.ToList();
             return View(detailbills);
         }
 
@@ -57,10 +42,10 @@ namespace LabNET105.Controllers
 
 
 
-       
 
 
-        
+
+
 
         // GET: BillController/Edit/5
         public ActionResult Edit(int id)
