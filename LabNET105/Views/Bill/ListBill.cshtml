@@ -43,7 +43,7 @@
 
                     <a asp-action="Details" asp-controller="Bill" class="btn btn-primary" >Xem hóa đơn</a>
                     <a class="btn-danger btn">Huỷ</a>
-                    <a class="btn-success btn">Mua lại</a>
+                    <a class="btn-success btn" asp-action="BuyBack" asp-controller="Cart" asp-route-id="@item.Id">Mua lại</a>
                    
             </td>
         </tr>

@@ -93,20 +93,53 @@ namespace LabNET105.Controllers
                 }
 
             }
-            //context.SaveChanges();
             return RedirectToAction("ListBill", "Bill");
+        }
+
+        public IActionResult BuyBack(int id)
+        {
+            var lstBillDetail = context.BillDetails.Where(x => x.BillId == id).ToList();
+
+            Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
+            var cartId = context.Carts.FirstOrDefault(x => x.AccountId == userId).Id;
+
+            var lstCartItems = context.CartItems.Where(x => x.CartId == cartId).ToList();
 
 
 
+            for (int i = 0; i < lstBillDetail.Count; i++)
+            {
+                if(lstCartItems.Count == 0 || lstCartItems.Count == null)
+                {
+                    CartItem cartItem = new CartItem
+                    {
+                        CartId = cartId,
+                        ProductId = lstBillDetail[i].ProductId,
+                        Quantity = lstBillDetail[i].Quantity
+                    };
 
+                    context.CartItems.Add(cartItem);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    for (int j = 0; j < lstCartItems.Count; j++)
+                    {
+                        if (lstBillDetail[i].ProductId == lstCartItems[j].ProductId)
+                        {
+                            var objCartitem = context.CartItems.Find(lstCartItems[j].Id);
 
-  
+                            objCartitem.Quantity += lstBillDetail[i].Quantity;
 
-               
+                            context.CartItems.Update(objCartitem);
+                            context.SaveChanges();
+                        }
 
+                    }
+                }
+            }
 
-
-
+            return RedirectToAction("Index", "Cart");
         }
     }
 }
