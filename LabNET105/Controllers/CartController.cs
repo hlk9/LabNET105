@@ -59,7 +59,7 @@ namespace LabNET105.Controllers
             Bill bill = new Bill
             {
                 AccountId = userId,
-                totalPrice = 100000,
+                totalPrice = 0,
                 Status = 1,
                 BuyDate = DateTime.Now
 

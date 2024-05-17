@@ -53,12 +53,25 @@ namespace LabNET105.Controllers
         // GET: BillController/Details/5
         public ActionResult Details(int id)
         {
-            var detailbills = _context.BillDetails.ToList();
-            return View(detailbills);
+            var list = (from billdetail in _context.BillDetails
+                        join product in _context.Products on billdetail.ProductId equals product.Id
+                        where billdetail.BillId == id
+                        select new BillDetailViewModel
+                        {
+                            BillId = id,
+                            ProductId = product.Id,
+                            ProductName = product.Name,
+                            Quantity = billdetail.Quantity,
+                            Price = billdetail.Price,
+                            Status = 1,
+                            TotalPrice = billdetail.Price * billdetail.Quantity
+                        }).ToList();
+
+            return View(list);
         }
 
         //Cái này là để xem những billdetail nào có trong bill
-
+        //phét
 
 
 
