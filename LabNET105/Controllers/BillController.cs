@@ -19,9 +19,9 @@ namespace LabNET105.Controllers
         // GET: BillController
 
 
-        public IActionResult  ListBill (int id)
+        public IActionResult  ListBill ()
         {
-            
+            Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
             var model = from a in _context.Bills
                         join b in _context.BillDetails
 
@@ -29,13 +29,13 @@ namespace LabNET105.Controllers
                         join c in _context.Accounts
                         on a.AccountId equals c.Id
 
-                        where a.Id == id
+                        where a.AccountId == userId
 
                         select new BillViewModel
                         {
                             Id = a.Id,
                             Name = c.Username,
-                            TotalPrice = b.Product.Price * b.Quantity
+                            TotalPrice = b.Price * b.Quantity
                         };
             model.OrderByDescending(x => x.TotalPrice);
             
