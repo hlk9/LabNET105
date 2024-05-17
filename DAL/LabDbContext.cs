@@ -27,7 +27,7 @@ namespace DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=LAPTOP-CXH2410\\SQLEXPRESS;Initial Catalog=LabNet105;Integrated Security=True; TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Data Source=DESKTOP-V87F30H\\HLDUC;Initial Catalog=LabNet105;Integrated Security=True; TrustServerCertificate=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -19,7 +19,7 @@ namespace LabNET105.Controllers
         // GET: BillController
 
 
-        public IActionResult  ListBill (int id, string name,double totalprice)
+        public IActionResult  ListBill (int id)
         {
             
             var model = from a in _context.Bills
@@ -35,7 +35,7 @@ namespace LabNET105.Controllers
                         {
                             Id = a.Id,
                             Name = c.Username,
-                            TotalPrice = b.Price * b.Quantity
+                            TotalPrice = b.Product.Price * b.Quantity
                         };
             model.OrderByDescending(x => x.TotalPrice);
             
@@ -55,38 +55,12 @@ namespace LabNET105.Controllers
         //Cái này là để xem những billdetail nào có trong bill
 
 
-        public IActionResult ThanhToan()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult ThanhToan(BillDetail billdetails, int id)
-        {
-            try
-            {
-
-                _context.BillDetails.Add(billdetails);
-                CartItem cartitem = _context.CartItems.Where(x => x.ProductId == id).FirstOrDefault();
-                if (cartitem.Quantity > 1)
-                {
-                    --cartitem.Quantity;
-                }
-                else
-                {
-                    _context.CartItems.Remove(cartitem);
-                }
-                return RedirectToAction("Index", "Home");
 
 
-            }
-            catch
-            {
-                return BadRequest();
-            }
+       
 
 
-        }
+        
 
         // GET: BillController/Edit/5
         public ActionResult Edit(int id)

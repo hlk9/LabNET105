@@ -1,4 +1,5 @@
 ﻿using DAL;
+using DAL.Models;
 using DAL.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +11,12 @@ namespace LabNET105.Controllers
         LabDbContext context;
 
         public List<CartItemViewModel> _lstCart;
+        public List<BillViewModel> _lstBill;
+
         public CartController()
         {
-
+            _lstCart = new List<CartItemViewModel>();
+            _lstBill = new List<BillViewModel>();
             context = new LabDbContext();
         }
 
@@ -38,6 +42,7 @@ namespace LabNET105.Controllers
                                     .Where(p => p.CartId == getCartId)
                                     .Select(p => new
                                     {
+                                        ProductId = p.ProductId,
                                         ProductName = p.Product.Name,
                                         Price = p.Product.Price,
                                         Quantity = p.Quantity,
@@ -45,12 +50,54 @@ namespace LabNET105.Controllers
                                     })
                                     .ToList();
 
+            for (int i = 0; i < allCartItem.Count; i++)
+            {
+                CartItemViewModel cartItemViewModel = new CartItemViewModel
+                {
+                    Product = context.Products.Find(allCartItem[i].ProductId),
+                    Quantity = allCartItem[i].Quantity,
+                    TotalPrice = allCartItem[i].TotalPrice
+                };
+                _lstCart.Add(cartItemViewModel);
+
+            }
+
+
             return View(allCartItem);
         }
 
+        [HttpPost]
+        public IActionResult ThanhToan(int id)
+        {
+            try
+            {
+
+                
 
 
 
+                Product product = context.Products.FirstOrDefault(x => x.Id == id);
+                if (product.Quantity > 1)
+                {
+                    --product.Quantity;
+                }
+                else
+                {
+                    context.Products.Remove(product);
+                }
+                context.SaveChanges();
+                return RedirectToAction("ListBill", "Bill");
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+
+
+
+        }
     }
 }
 
