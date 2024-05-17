@@ -1,6 +1,7 @@
 ﻿using DAL;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace LabNET105.Controllers
 {
@@ -46,7 +47,7 @@ namespace LabNET105.Controllers
 
             return RedirectToAction("Create");
         }
-        public IActionResult Edit(int productId) 
+        public IActionResult Edit(int productId)
         {
             var objProduct = _context.Products.Find(productId);
             return View(objProduct);
@@ -73,7 +74,7 @@ namespace LabNET105.Controllers
         {
             var objProduct = _context.Products.Find(productId);
 
-            if(objProduct != null)
+            if (objProduct != null)
             {
                 _context.Products.Remove(objProduct);
                 _context.SaveChanges();
@@ -81,5 +82,48 @@ namespace LabNET105.Controllers
 
             return RedirectToAction("Index");
         }
+
+        
+
+
+
+        public IActionResult AddToCart(int productId, int quantity)
+        {
+            // Kiểm tra xem có đang đăng nhập ko, nếu ko thì bắt đăng nhập
+            var product = _context.Products.FirstOrDefault(p => p.Id == productId);
+            var check = HttpContext.Session.GetString("username");
+            if (String.IsNullOrEmpty(check))
+            {
+                return RedirectToAction("Index", "Account"); // chuyển hướng về trang login
+            }
+            else
+            {
+                var cartItem = _context.CartItems.FirstOrDefault(p => p.CartId.ToString() == check  && p.ProductId == productId);
+                if (cartItem == null)
+                {
+                    string checkstring = check.ToString();
+                    CartItem details = new CartItem()
+                    {
+                        ProductId = productId,
+                        CartId = int.Parse(check),
+                        Quantity = quantity
+                    };
+                    _context.CartItems.Add(details);
+                    _context.SaveChanges();
+                }
+                else if (cartItem.Quantity <=  product.Quantity)
+                {
+                    return BadRequest(" Số lượng trong kho đã hết");
+                }
+                else
+                {
+                    cartItem.Quantity = cartItem.Quantity + quantity;
+                    _context.CartItems.Update(cartItem); 
+                    _context.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index", "Product");
+        }
+
     }
 }

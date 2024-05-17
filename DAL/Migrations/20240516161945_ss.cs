@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class ver1 : Migration
+    public partial class ss : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -165,7 +165,8 @@ namespace DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_AccountId",
                 table: "Carts",
-                column: "AccountId");
+                column: "AccountId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
