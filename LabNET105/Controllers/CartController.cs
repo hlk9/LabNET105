@@ -76,23 +76,37 @@ namespace LabNET105.Controllers
                     Price = context.Products.FirstOrDefault(x => x.Id == lstCartItems[i].ProductId).Price
                 };
                 context.BillDetails.Add(billdetails);
-                context.SaveChanges();
+                //context.SaveChanges();
                 if (context.Products.Find(lstCartItems[i].ProductId) != null)
                 {
                     var objProduct = context.Products.Find(lstCartItems[i].ProductId);
                     objProduct.Quantity -= lstCartItems[i].Quantity;
                     context.Products.Update(objProduct);
-                    context.SaveChanges();
+                    //context.SaveChanges();
                 }
                 if (context.CartItems.FirstOrDefault(x => x.ProductId == lstCartItems[i].ProductId) != null)
                 {
                     var objCartItem = context.CartItems.FirstOrDefault(x => x.ProductId == lstCartItems[i].ProductId);
                     context.CartItems.Remove(objCartItem);
-                    context.SaveChanges();
+                    //context.SaveChanges();
 
                 }
 
             }
+            context.SaveChanges();
+
+            var listBillDetail = context.BillDetails.Where(x => x.BillId == bill.Id).ToList();
+            double total = 0;
+            foreach (var item in listBillDetail)
+            {
+                total+= item.Price * item.Quantity;
+            }
+
+            var objBill = context.Bills.Find(bill.Id);
+            objBill.totalPrice = total;
+            context.Bills.Update(objBill);
+            context.SaveChanges();
+
             return RedirectToAction("ListBill", "Bill");
         }
 
