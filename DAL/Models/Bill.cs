@@ -12,6 +12,8 @@ namespace DAL.Models
         public int Id { get; set; }
         [ForeignKey("AccountId")]
         public Guid AccountId { get; set; }
+
+        public double totalPrice { get; set; }
         public virtual Account Account { get; set; }
         public byte Status { get; set; }
         public virtual ICollection<BillDetail> BillDetails { get; set; }
