@@ -75,6 +75,7 @@ namespace LabNET105.Controllers
                     Price = context.Products.FirstOrDefault(x => x.Id == lstCartItems[i].ProductId).Price
                 };
                 context.BillDetails.Add(billdetails);
+                context.SaveChanges();
                 if (context.Products.Find(lstCartItems[i].ProductId) != null)
                 {
                     var objProduct = context.Products.Find(lstCartItems[i].ProductId);
@@ -82,9 +83,9 @@ namespace LabNET105.Controllers
                     context.Products.Update(objProduct);
                     context.SaveChanges();
                 }
-                if (context.CartItems.Find(lstCartItems[i].ProductId) != null)
+                if (context.CartItems.FirstOrDefault(x => x.ProductId == lstCartItems[i].ProductId) != null)
                 {
-                    var objCartItem = context.CartItems.Find(lstCartItems[i].ProductId);
+                    var objCartItem = context.CartItems.FirstOrDefault(x => x.ProductId == lstCartItems[i].ProductId);
                     context.CartItems.Remove(objCartItem);
                     context.SaveChanges();
 
