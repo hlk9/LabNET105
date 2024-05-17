@@ -54,7 +54,6 @@ namespace LabNET105.Controllers
 
         public IActionResult ThanhToan()
         {
-
             Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
             var lstCartItems = context.CartItems.ToList();
             Bill bill = new Bill
@@ -71,7 +70,7 @@ namespace LabNET105.Controllers
                 BillDetail billdetails = new BillDetail()
                 {
                     BillId = bill.Id,
-                    ProductId = lstCartItems[i].Id,
+                    ProductId = lstCartItems[i].ProductId,
                     Quantity = lstCartItems[i].Quantity,
                     Price = context.Products.FirstOrDefault(x => x.Id == lstCartItems[i].ProductId).Price
                 };
@@ -92,6 +91,7 @@ namespace LabNET105.Controllers
                 }
 
             }
+            //context.SaveChanges();
             return RedirectToAction("ListBill", "Bill");
 
 
