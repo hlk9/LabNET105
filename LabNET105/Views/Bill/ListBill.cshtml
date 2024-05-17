@@ -7,7 +7,7 @@
 <h1>ListBill</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+   
 </p>
 <table class="table">
     <thead>
@@ -40,6 +40,8 @@
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+
+                    <a asp-action="Details" asp-controller="Bill" class="btn btn-primary nav-link text-dark" >Xem hóa đơn</a>
             </td>
         </tr>
 }
