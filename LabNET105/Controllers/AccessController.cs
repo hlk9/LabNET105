@@ -76,6 +76,15 @@ namespace LabNET105.Controllers
                     acc.PhoneNumber = phone;
                     acc.Address = addr;
                     _context.Accounts.Add(acc);
+                     // khi tạo tài khoản đồng thời Add Giỏ hàng 
+                    Cart cart = new Cart()
+                    {
+                        AccountId = acc.Id,
+                        Status =1
+                    };
+                    _context.Carts.Add(cart);
+
+
                     _context.SaveChanges();
 
 
