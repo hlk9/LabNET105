@@ -49,50 +49,58 @@ namespace LabNET105.Controllers
                                         TotalPrice = p.Quantity * p.Product.Price
                                     })
                                     .ToList();
-
-            for (int i = 0; i < allCartItem.Count; i++)
-            {
-                CartItemViewModel cartItemViewModel = new CartItemViewModel
-                {
-                    Product = context.Products.Find(allCartItem[i].ProductId),
-                    Quantity = allCartItem[i].Quantity,
-                    TotalPrice = allCartItem[i].TotalPrice
-                };
-                _lstCart.Add(cartItemViewModel);
-
-            }
-
-
             return View(allCartItem);
         }
 
-        [HttpPost]
-        public IActionResult ThanhToan(int id)
+        public IActionResult ThanhToan()
         {
-            try
+
+            Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
+            var lstCartItems = context.CartItems.ToList();
+            Bill bill = new Bill
             {
+                AccountId = userId,
+                totalPrice = 100000,
+                Status = 1
 
-                
-
-
-
-                Product product = context.Products.FirstOrDefault(x => x.Id == id);
-                if (product.Quantity > 1)
+            };
+            context.Bills.Add(bill);
+            context.SaveChanges();
+            for (int i = 0; i < lstCartItems.Count; i++)
+            {
+                BillDetail billdetails = new BillDetail()
                 {
-                    --product.Quantity;
-                }
-                else
+                    BillId = bill.Id,
+                    ProductId = lstCartItems[i].Id,
+                    Quantity = lstCartItems[i].Quantity,
+                    Price = context.Products.FirstOrDefault(x => x.Id == lstCartItems[i].ProductId).Price
+                };
+                context.BillDetails.Add(billdetails);
+                if (context.Products.Find(lstCartItems[i].ProductId) != null)
                 {
-                    context.Products.Remove(product);
+                    var objProduct = context.Products.Find(lstCartItems[i].ProductId);
+                    objProduct.Quantity -= lstCartItems[i].Quantity;
+                    context.Products.Update(objProduct);
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
-                return RedirectToAction("ListBill", "Bill");
+                if (context.CartItems.Find(lstCartItems[i].ProductId) != null)
+                {
+                    var objCartItem = context.CartItems.Find(lstCartItems[i].ProductId);
+                    context.CartItems.Remove(objCartItem);
+                    context.SaveChanges();
+
+                }
 
             }
-            catch
-            {
-                return BadRequest();
-            }
+            return RedirectToAction("ListBill", "Bill");
+
+
+
+
+
+  
+
+               
 
 
 
