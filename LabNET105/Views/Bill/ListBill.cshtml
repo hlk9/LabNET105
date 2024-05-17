@@ -37,12 +37,8 @@
                 @Html.DisplayFor(modelItem => item.totalPrice)
             </td>
             <td>
-               @*  @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }) *@
-
                     <a asp-action="Details" asp-controller="Bill" class="btn btn-primary" >Xem hóa đơn</a>
-                    <a class="btn-danger btn">Huỷ</a>
+                    <a asp-action="HuyBill" asp-controller="Bill" asp-route-id ="@item.Id" class="btn-danger btn">Huỷ</a>
                     <a class="btn-success btn">Mua lại</a>
                    
             </td>

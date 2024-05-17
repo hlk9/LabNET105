@@ -23,16 +23,35 @@ namespace LabNET105.Controllers
         {
             Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
 
-            ICollection<Bill> model = _context.Bills.Where(x => x.AccountId == userId).ToList();
+            ICollection<Bill> model = _context.Bills.Where(x => x.AccountId == userId && x.Status != 100).ToList();
 
             return View(model);
 
 
         }
+
+        public IActionResult HuyBill(int id)
+        {
+            var lstBillDetail = _context.BillDetails.ToList();
+            for(int i = 0; i < lstBillDetail.Count; i++)
+            {
+                if (_context.Products.FirstOrDefault(x => x.Id == lstBillDetail[i].ProductId) != null)
+                {
+                    var obj = _context.Products.FirstOrDefault(x => x.Id == lstBillDetail[i].ProductId);
+                    obj.Quantity += lstBillDetail[i].Quantity;
+                    _context.Products.Update(obj);
+                    _context.SaveChanges();
+                }    
+            }
+            var statusbill = _context.Bills.Find(id);
+            statusbill.Status = 100;
+            _context.Bills.Update(statusbill);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Product");
+        }
         // GET: BillController/Details/5
         public ActionResult Details(int id)
         {
-
             var detailbills = _context.BillDetails.ToList();
             return View(detailbills);
         }
