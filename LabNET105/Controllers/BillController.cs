@@ -48,6 +48,7 @@ namespace LabNET105.Controllers
             _context.Bills.Update(statusbill);
             _context.SaveChanges();
             return RedirectToAction("Index", "Product");
+            // nef
         }
         // GET: BillController/Details/5
         public ActionResult Details(int id)
