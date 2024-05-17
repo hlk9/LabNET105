@@ -1,49 +1,91 @@
 ﻿using DAL;
+using DAL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using DAL.ViewModel;
+
 
 namespace LabNET105.Controllers
 {
     public class BillController : Controller
     {
         LabDbContext _context;
+
         public BillController()
         {
             _context = new LabDbContext();
         }
         // GET: BillController
-        public ActionResult ListBills()
-        {
-            var bills = _context.Bills.ToList() ;
-            return View(bills);
-        }
 
+
+        public IActionResult  ListBill (int id, string name,double totalprice)
+        {
+            
+            var model = from a in _context.Bills
+                        join b in _context.BillDetails
+
+                        on a.Id equals b.BillId
+                        join c in _context.Accounts
+                        on a.AccountId equals c.Id
+
+                        where a.Id == id
+
+                        select new BillViewModel
+                        {
+                            Id = a.Id,
+                            Name = c.Username,
+                            TotalPrice = b.Price * b.Quantity
+                        };
+            model.OrderByDescending(x => x.TotalPrice);
+            
+
+            return View(model.ToList());
+
+                       
+        }
         // GET: BillController/Details/5
         public ActionResult Details(int id)
         {
+          
             var detailbills= _context.BillDetails.ToList() ;
             return View(detailbills);
         }
 
-        // GET: BillController/Create
-        public ActionResult Create()
+        //Cái này là để xem những billdetail nào có trong bill
+
+
+        public IActionResult Create()
         {
             return View();
         }
 
-        // POST: BillController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult ThanhToan(BillDetail billdetails, int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+
+                _context.BillDetails.Add(billdetails);
+                CartItem cartitem = _context.CartItems.Where(x => x.ProductId == id).FirstOrDefault();
+                if (cartitem.Quantity > 1)
+                {
+                    --cartitem.Quantity;
+                }
+                else
+                {
+                    _context.CartItems.Remove(cartitem);
+                }
+                return RedirectToAction("Index", "Home");
+
+
             }
             catch
             {
-                return View();
+                return BadRequest();
             }
+
+
         }
 
         // GET: BillController/Edit/5
