@@ -83,48 +83,72 @@ namespace LabNET105.Controllers
             return RedirectToAction("Index");
         }
 
-        
-
-
+       
 
         public IActionResult AddToCart(int productId, int quantity)
         {
-            // Kiểm tra xem có đang đăng nhập ko, nếu ko thì bắt đăng nhập
-            var product = _context.Products.FirstOrDefault(p => p.Id == productId);
-            Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
-            var getCartId = _context.Carts.FirstOrDefault(x => x.AccountId == userId);
-            if (userId == null)
+            // Kiểm tra xem có đang đăng nhập không, nếu không thì bắt đăng nhập
+            var userIdString = HttpContext.Session.GetString("uid");
+            if (string.IsNullOrEmpty(userIdString))
             {
                 return RedirectToAction("Index", "Account"); // chuyển hướng về trang login
             }
+
+            Guid userId = Guid.Parse(userIdString);
+
+            // Lấy sản phẩm từ cơ sở dữ liệu
+            var product = _context.Products.FirstOrDefault(p => p.Id == productId);
+            if (product == null)
+            {
+                return NotFound("Sản phẩm không tồn tại");
+            }
+
+            // Kiểm tra xem có giỏ hàng cho tài khoản này không
+            var cart = _context.Carts.FirstOrDefault(x => x.AccountId == userId);
+            if (cart == null)
+            {
+                return NotFound("Giỏ hàng không tồn tại");
+            }
+
+            // Kiểm tra xem số lượng yêu cầu có lớn hơn số lượng tồn kho không
+            if (quantity > product.Quantity)
+            {
+                return BadRequest("Số lượng yêu cầu vượt quá số lượng tồn kho");
+            }
+
+            // Tìm kiếm sản phẩm trong giỏ hàng
+            var cartItem = _context.CartItems.FirstOrDefault(p => p.CartId == cart.Id && p.ProductId == productId);
+            if (cartItem == null)
+            {
+                // Thêm sản phẩm mới vào giỏ hàng
+                CartItem newCartItem = new CartItem()
+                {
+                    ProductId = productId,
+                    CartId = cart.Id,
+                    Quantity = quantity
+                };
+                _context.CartItems.Add(newCartItem);
+            }
             else
             {
-                var cartItem = _context.CartItems.FirstOrDefault(p => p.CartId == getCartId.Id  && p.ProductId == productId);
-                if (cartItem == null)
+                // Kiểm tra xem số lượng cập nhật có vượt quá số lượng tồn kho không
+                if (cartItem.Quantity + quantity > product.Quantity)
                 {
-                    
-                    CartItem details = new CartItem()
-                    {
-                        ProductId = productId,
-                        CartId = getCartId.Id,
-                        Quantity = quantity
-                    };
-                    _context.CartItems.Add(details);
-                    _context.SaveChanges();
+                    return BadRequest("Số lượng trong kho không đủ để thêm số lượng yêu cầu");
                 }
-                else if (cartItem.Quantity >=  product.Quantity)
-                {
-                    return BadRequest(" Số lượng trong kho đã hết");
-                }
-                else
-                {
-                    cartItem.Quantity = cartItem.Quantity + quantity;
-                    _context.CartItems.Update(cartItem); 
-                    _context.SaveChanges();
-                }
+
+                // Cập nhật số lượng sản phẩm trong giỏ hàng
+                cartItem.Quantity += quantity;
+                _context.CartItems.Update(cartItem);
             }
+
+            // Lưu thay đổi vào cơ sở dữ liệu
+            _context.SaveChanges();
+
+            // Chuyển hướng về trang sản phẩm
             return RedirectToAction("Index", "Product");
         }
+
 
     }
 }
