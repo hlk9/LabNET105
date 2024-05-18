@@ -18,7 +18,13 @@
             <tr>
                 <td>@item.ProductName</td>
                 <td>@item.Price</td>
-                <td>@item.Quantity</td>
+                <form asp-action="UpdateCart" method="post">
+                <td>
+                    <input type="number" name="qty" id="qty" value="@item.Quantity" />
+                    <button type="submit" class="btn btn-warning" asp-action="UpdateCart" asp-controller="Cart" asp-route-id="@item.id">Sửa</button>    
+                </td>
+                    </form>
+                
                 <td>@item.TotalPrice</td>
                 <td>
                     <a class="btn btn-danger nav-link text-white" asp-action="DeleteProductToCart" asp-controller="Cart" asp-route-id="@item.id">Xóa</a>

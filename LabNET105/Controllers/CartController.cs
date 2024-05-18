@@ -197,6 +197,21 @@ namespace LabNET105.Controllers
 
             return RedirectToAction("Index", "Cart");
         }
+
+        [HttpPost]
+        public IActionResult UpdateCart(int qty, int id)
+        {
+            
+            var obj = context.CartItems.Find(id);
+            if(context.Products.Find(obj.ProductId).Quantity< qty || qty <= 0)
+            {
+                return BadRequest("Không đủ hàng");
+            }    
+            obj.Quantity = qty;
+            context.CartItems.Update(obj);
+            context.SaveChanges();
+            return RedirectToAction("Index", "Cart");
+        }
     }
 }
 

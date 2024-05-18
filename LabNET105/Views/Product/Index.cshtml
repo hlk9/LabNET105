@@ -67,19 +67,19 @@
                 <button class="btn btn-warning"><a class="nav-link text-white p-0" asp-action="Edit" asp-controller="Product" asp-route-productId="@item.Id">Sửa</a></button>
                 <button class="btn btn-danger"><a class="nav-link text-white p-0" asp-action="Delete" asp-controller="Product" asp-route-productId="@item.Id">Xóa</a></button>
             </td>
-                <td>
                     <form action="@Url.Action("AddToCart", "Product")" method="post">
+                <td>
                         <div class="form-group w-50">
                            
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control" />
                         </div>
                        
-                    </form>
                 </td>
                 <td>
                     <input type="hidden" name="productId" value="@item.Id" />
                     <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
                 </td>
+                    </form>
         </tr>
 }
     </tbody>
