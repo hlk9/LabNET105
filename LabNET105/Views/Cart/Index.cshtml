@@ -21,10 +21,7 @@
                 <td>@item.Quantity</td>
                 <td>@item.TotalPrice</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    
+                    <a class="btn btn-danger nav-link text-white" asp-action="DeleteProductToCart" asp-controller="Cart" asp-route-id="@item.id">Xóa</a>
                 </td>
 
             </tr>

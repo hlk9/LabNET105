@@ -42,6 +42,7 @@ namespace LabNET105.Controllers
                                     .Where(p => p.CartId == getCartId)
                                     .Select(p => new
                                     {
+                                        id = p.Id,
                                         ProductId = p.ProductId,
                                         ProductName = p.Product.Name,
                                         Price = p.Product.Price,
@@ -50,6 +51,16 @@ namespace LabNET105.Controllers
                                     })
                                     .ToList();
             return View(allCartItem);
+        }
+
+        public IActionResult DeleteProductToCart(int id)
+        {
+            var objCartItem = context.CartItems.Find(id);
+
+            context.CartItems.Remove(objCartItem);
+            context.SaveChanges();
+            return RedirectToAction("Index", "Cart");
+            
         }
 
         public IActionResult ThanhToan()
