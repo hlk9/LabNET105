@@ -16,8 +16,15 @@ namespace LabNET105.Controllers
 
         public IActionResult Index()
         {
-            var listProduct = _context.Products.ToList();
-            return View(listProduct);
+            if(HttpContext.Session.GetString("uid") == null)
+            {
+                return RedirectToAction("Index", "Access");
+            }
+            else
+            {
+                var listProduct = _context.Products.ToList();
+                return View(listProduct);
+            }
         }
 
         public IActionResult Detail(int productId)
