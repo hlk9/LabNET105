@@ -158,6 +158,13 @@ namespace LabNET105.Controllers
 
             for (int i = 0; i < lstBillDetail.Count; i++)
             {
+                var prod = context.Products.Find(lstBillDetail[i].ProductId);
+
+                if (prod != null && lstBillDetail[i].Quantity>prod.Quantity)
+                {
+                    return BadRequest("Hết hàng");
+                }    
+
                 if(lstCartItems.Count == 0 || lstCartItems.Count == null)
                 {
                     CartItem cartItem = new CartItem
