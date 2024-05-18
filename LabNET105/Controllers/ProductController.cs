@@ -16,15 +16,11 @@ namespace LabNET105.Controllers
 
         public IActionResult Index()
         {
-            if(HttpContext.Session.GetString("uid") == null)
-            {
-                return RedirectToAction("Index", "Access");
-            }
-            else
-            {
+           
+         
                 var listProduct = _context.Products.ToList();
                 return View(listProduct);
-            }
+         
         }
 
         public IActionResult Detail(int productId)
@@ -98,7 +94,7 @@ namespace LabNET105.Controllers
             var userIdString = HttpContext.Session.GetString("uid");
             if (string.IsNullOrEmpty(userIdString))
             {
-                return RedirectToAction("Index", "Account"); // chuyển hướng về trang login
+                return RedirectToAction("Index", "Access"); // chuyển hướng về trang login
             }
 
             Guid userId = Guid.Parse(userIdString);

@@ -28,7 +28,15 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Bill" asp-action="ListBill">Hoá đơn</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Quản lý sản phẩm</a>
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle text-dark" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Quản lý sản phẩm
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" asp-action="Create" asp-controller="Product">Thêm mới</a></li>
+                                  
+                                </ul>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
