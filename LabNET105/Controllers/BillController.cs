@@ -21,11 +21,19 @@ namespace LabNET105.Controllers
 
         public IActionResult ListBill()
         {
-            Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
+            try
+            {
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
+                ICollection<Bill> model = _context.Bills.Where(x => x.AccountId == userId).OrderByDescending(x => x.BuyDate).ToList();
 
-            ICollection<Bill> model = _context.Bills.Where(x => x.AccountId == userId).OrderByDescending(x=>x.BuyDate).ToList();
+                return View(model);
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Access");
+            }
 
-            return View(model);
+          
 
 
         }
