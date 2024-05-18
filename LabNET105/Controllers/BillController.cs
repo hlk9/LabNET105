@@ -32,7 +32,7 @@ namespace LabNET105.Controllers
 
         public IActionResult HuyBill(int id)
         {
-            var lstBillDetail = _context.BillDetails.ToList();
+            var lstBillDetail = _context.BillDetails.Where(x=>x.BillId==id).ToList();
             for(int i = 0; i < lstBillDetail.Count; i++)
             {
                 if (_context.Products.FirstOrDefault(x => x.Id == lstBillDetail[i].ProductId) != null)
