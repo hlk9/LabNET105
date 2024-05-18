@@ -3,6 +3,7 @@ using DAL.Models;
 using DAL.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 
 namespace LabNET105.Controllers
 {
@@ -67,7 +68,8 @@ namespace LabNET105.Controllers
         {
 
             Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
-            var lstCartItems = context.CartItems.ToList();
+            int cartId = context.Carts.FirstOrDefault(x => x.AccountId == userId).Id;
+            var lstCartItems = context.CartItems.Where(x => x.CartId == cartId).ToList();
 
             if(lstCartItems.Count == 0 || lstCartItems.Count == null)
             {
@@ -75,6 +77,18 @@ namespace LabNET105.Controllers
             }
             else
             {
+                for (int i = 0; i < lstCartItems.Count; i++)
+                {
+                    var product = context.Products.FirstOrDefault(x => x.Id == lstCartItems[i].ProductId);
+
+                    if(product != null)
+                    {
+                        if(product.Quantity < lstCartItems[i].Quantity)
+                        {
+                            return BadRequest("Số lượng trong giỏ hàng lớn hơn số lượng trong kho");
+                        }
+                    }
+                }
                 Bill bill = new Bill
                 {
                     AccountId = userId,
@@ -103,9 +117,9 @@ namespace LabNET105.Controllers
                         context.Products.Update(objProduct);
                         //context.SaveChanges();
                     }
-                    if (context.CartItems.FirstOrDefault(x => x.ProductId == lstCartItems[i].ProductId) != null)
+                    if (context.CartItems.FirstOrDefault(x => x.CartId == lstCartItems[i].CartId) != null)
                     {
-                        var objCartItem = context.CartItems.FirstOrDefault(x => x.ProductId == lstCartItems[i].ProductId);
+                        var objCartItem = context.CartItems.FirstOrDefault(x => x.CartId == lstCartItems[i].CartId);
                         context.CartItems.Remove(objCartItem);
                         //context.SaveChanges();
 
