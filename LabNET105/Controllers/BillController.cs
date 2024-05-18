@@ -23,7 +23,7 @@ namespace LabNET105.Controllers
         {
             Guid userId = Guid.Parse(HttpContext.Session.GetString("uid"));
 
-            ICollection<Bill> model = _context.Bills.Where(x => x.AccountId == userId && x.Status != 100).ToList();
+            ICollection<Bill> model = _context.Bills.Where(x => x.AccountId == userId).OrderByDescending(x=>x.BuyDate).ToList();
 
             return View(model);
 

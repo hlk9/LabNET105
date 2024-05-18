@@ -11,13 +11,16 @@
     <thead>
         <tr>
             <th>
-              <label class="form-label">ID</label>
+                <label class="form-label">ID</label>
             </th>
             <th>
-                <label class="form-label">Ngày mua</label>
+                <label class="form-label">Ngày tạo</label>
             </th>
             <th>
                 <label class="form-label">Thành tiền</label>
+            </th>
+            <th>
+                Trạng thái
             </th>
             <th>
                 Thao tác
@@ -25,26 +28,37 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @item.BuyDate.ToString("HH:mm dd/MM/yyyy")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.totalPrice)
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @item.BuyDate.ToString("HH:mm dd/MM/yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.totalPrice)
+                </td>
+                <td>
+                    @if (item.Status != 1)
+                    {
+                        <span class="badge bg-danger">Đã huỷ</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Thành công</span>
+                    }
+                </td>
+                <td>
                     <a asp-action="Details" asp-controller="Bill" class="btn btn-primary" asp-route-id="@item.Id">Xem hóa đơn</a>
-                    <a asp-action="HuyBill" asp-controller="Bill" asp-route-id ="@item.Id" class="btn-danger btn">Huỷ</a>
+                    <a asp-action="HuyBill" asp-controller="Bill" asp-route-id="@item.Id" class="btn-danger btn">Huỷ</a>
                     <a class="btn-success btn" asp-action="BuyBack" asp-controller="Cart" asp-route-id="@item.Id">Mua lại</a>
-                    
-                   
+
+
                     @* ksdfa *@
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
