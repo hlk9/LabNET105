@@ -23,8 +23,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Sản phẩm</a>
                         </li>
-                       
-                           <li class="nav-item">
+
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Bill" asp-action="ListBill">Hoá đơn</a>
                         </li>
                         <li class="nav-item">
@@ -33,17 +33,25 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
                         </li>
-                   
+
                     </ul>
                 </div>
                 <div>
-                    @if(contxt.HttpContext.Session.GetString("username")!=null)
-                    {
-                        <p>Xin chào @contxt.HttpContext.Session.GetString("username")</p>
+                    @if (contxt.HttpContext.Session.GetString("username") != null)
+                    {                      
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Xin chào @contxt.HttpContext.Session.GetString("username")
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" asp-action="Logout" asp-controller="Access">Đăng xuất</a></li>
+                              
+                            </ul>
+                        </div>
                     }
                     else
                     {
-                    <a asp-action="Index" asp-controller="Access" class="text-black text-decoration-none">Đăng nhập</a>
+                        <a asp-action="Index" asp-controller="Access" class="text-black text-decoration-none">Đăng nhập</a>
                     }
                 </div>
             </div>

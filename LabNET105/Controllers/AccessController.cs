@@ -2,6 +2,7 @@
 using DAL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 
 namespace LabNET105.Controllers
 {
@@ -92,6 +93,15 @@ namespace LabNET105.Controllers
                 }
             }
             return View();
+        }
+
+        public IActionResult Logout()
+        {
+            _contextAccessor.HttpContext.Session.Remove("username");
+            _contextAccessor.HttpContext.Session.Remove("phone");
+            _contextAccessor.HttpContext.Session.Remove("uid");
+            _contextAccessor.HttpContext.Session.Clear();
+            return RedirectToAction("Index");
         }
     }
 }
