@@ -16,7 +16,7 @@ namespace LabNET105.Controllers
 
         public CartController()
         {
-            _lstCart = new List<CartItemViewModel>();
+            _lstCart = new List<CartItemViewModel>();  
             _lstBill = new List<BillViewModel>();
             context = new LabDbContext();
         }
